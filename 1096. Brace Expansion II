@@ -1,0 +1,27 @@
+class Solution:
+    def braceExpansionII(self, expression: str) -> list[str]:
+        def parse():
+            union = set()
+            current = {""}
+            while i[0] < len(expression) and expression[i[0]] != '}':               
+                if expression[i[0]] == ',':
+                    union |= current
+                    current = {""}
+                    i[0] += 1
+                    continue
+                if expression[i[0]] == '{':
+                    i[0] += 1
+                    part = parse()
+                    i[0] += 1   # skip '}'
+                else:
+                    part = {expression[i[0]]}
+                    i[0] += 1
+                current = {
+                    a + b
+                    for a in current
+                    for b in part
+                }
+            union |= current
+            return union
+        i = [0]
+        return sorted(parse())
